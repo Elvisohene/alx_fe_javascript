@@ -407,3 +407,4 @@ function syncQuotes() {
 }
 // Automatically sync quotes from the server every 60 seconds
 setInterval(syncQuotes, 60000); // 60000 ms = 60 seconds
+syncStatus.textContent = 'Quotes synced with server!';
