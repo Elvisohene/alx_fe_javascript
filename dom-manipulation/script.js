@@ -12,7 +12,7 @@ const addQuoteBtn = document.getElementById("addQuoteBtn");
 const quoteInput = document.getElementById("newQuoteText");
 const categoryInput = document.getElementById("newQuoteCategory");
 
-// Show a random quote
+// Function to show a random quote
 function showRandomQuote() {
   if (quotes.length === 0) {
     quoteDisplay.textContent = "No quotes available.";
@@ -23,7 +23,7 @@ function showRandomQuote() {
   quoteDisplay.innerHTML = `"${quote.text}"<br><em>(${quote.category})</em>`;
 }
 
-// Add a new quote
+// Function to add a new quote
 function addQuote() {
   const text = quoteInput.value.trim();
   const category = categoryInput.value.trim();
@@ -33,14 +33,18 @@ function addQuote() {
     return;
   }
 
+  // Add new quote to the array
   quotes.push({ text, category });
-
-  // Clear the form inputs
-  quoteInput.value = "";
-  categoryInput.value = "";
 
   // Optional: Show confirmation
   alert("Quote added successfully!");
+
+  // Clear inputs
+  quoteInput.value = "";
+  categoryInput.value = "";
+
+  // Optionally show the new quote
+  showRandomQuote();
 }
 
 // Event listeners
