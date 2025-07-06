@@ -333,3 +333,27 @@ document.addEventListener("DOMContentLoaded", () => {
   newQuoteBtn.addEventListener("click", showRandomQuote);
   createAddQuoteForm();
 });
+async function fetchQuotesFromServer() {
+  const syncStatus = document.getElementById('syncStatus');
+  syncStatus.textContent = 'Syncing with server...';
+
+  try {
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=5');
+    const data = await response.json();
+
+    const serverQuotes = data.map(post => ({
+      text: post.title,
+      category: 'Server'
+    }));
+
+    quotes = serverQuotes;
+    saveQuotes();
+    syncStatus.textContent = 'Quotes synced from server.';
+
+    showRandomQuote();
+    populateCategories();
+  } catch (error) {
+    console.error('Error syncing:', error);
+    syncStatus.textContent = 'Failed to sync with server.';
+  }
+}
