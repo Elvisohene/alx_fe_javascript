@@ -378,3 +378,30 @@ async function postQuotesToServer() {
     syncStatus.textContent = 'Failed to post quotes.';
   }
 }
+function syncQuotes() {
+  const syncStatus = document.getElementById('syncStatus');
+  syncStatus.textContent = 'Syncing quotes with server...';
+
+  // Simulate fetching from server
+  fetch('https://jsonplaceholder.typicode.com/posts?_limit=5')
+    .then(response => response.json())
+    .then(data => {
+      const serverQuotes = data.map(post => ({
+        text: post.title,
+        category: 'Server'
+      }));
+
+      // Simple conflict resolution: server overwrites local
+      quotes = serverQuotes;
+      saveQuotes();
+
+      showRandomQuote();
+      populateCategories();
+
+      syncStatus.textContent = 'Quotes successfully synced from server.';
+    })
+    .catch(error => {
+      console.error('Sync error:', error);
+      syncStatus.textContent = 'Failed to sync quotes.';
+    });
+}
