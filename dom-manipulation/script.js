@@ -215,3 +215,47 @@ document.addEventListener("DOMContentLoaded", () => {
   populateCategories();
   showRandomQuote();
 });
+// Dummy server URL (you can use your own or JSONPlaceholder)
+const serverUrl = "https://jsonplaceholder.typicode.com/posts"; // Placeholder endpoint
+
+function fetchQuotesFromServer() {
+  const syncStatus = document.getElementById("syncStatus");
+  syncStatus.textContent = "Syncing with server...";
+
+  // Simulate server request
+  fetch(serverUrl)
+    .then((response) => response.json())
+    .then((data) => {
+      // Simulate that server returns quotes in a compatible format
+      const serverQuotes = data.slice(0, 5).map((item, index) => ({
+        text: item.title,
+        category: `Category ${index + 1}`
+      }));
+
+      // Merge and deduplicate quotes
+      const localQuotes = JSON.parse(localStorage.getItem("quotes")) || [];
+      const mergedQuotes = [...localQuotes];
+
+      serverQuotes.forEach((quote) => {
+        const exists = localQuotes.some(
+          (q) => q.text === quote.text && q.category === quote.category
+        );
+        if (!exists) {
+          mergedQuotes.push(quote);
+        }
+      });
+
+      // Save to localStorage
+      localStorage.setItem("quotes", JSON.stringify(mergedQuotes));
+      quotes = mergedQuotes;
+
+      // Update UI
+      populateCategories();
+      filterQuotes();
+      syncStatus.textContent = "Sync complete: quotes updated from server.";
+    })
+    .catch((error) => {
+      console.error("Error syncing from server:", error);
+      syncStatus.textContent = "Sync failed. Please try again.";
+    });
+}
