@@ -357,3 +357,24 @@ async function fetchQuotesFromServer() {
     syncStatus.textContent = 'Failed to sync with server.';
   }
 }
+async function postQuotesToServer() {
+  const syncStatus = document.getElementById('syncStatus');
+  syncStatus.textContent = 'Posting quotes to server...';
+
+  try {
+    const response = await fetch('https://jsonplaceholder.typicode.com/posts', {
+      method: 'POST', // ✅ contains method
+      headers: {      // ✅ contains headers
+        'Content-Type': 'application/json' // ✅ contains Content-Type
+      },
+      body: JSON.stringify(quotes)
+    });
+
+    const result = await response.json();
+    console.log('Server response:', result);
+    syncStatus.textContent = 'Quotes posted to server (simulated).';
+  } catch (error) {
+    console.error('Error posting:', error);
+    syncStatus.textContent = 'Failed to post quotes.';
+  }
+}
